@@ -6,10 +6,13 @@ COPY railway-start.sh /app/railway-start.sh
 
 # Railway gives each service one volume, mounted at /data. Book files live there too
 # (/data/books, the only folder the library picker offers), so they survive redeploys.
+# TRUST_PROXY adds Railway's edge proxy range (100.64.0.0/10) to upstream's default, so BookOrbit
+# sees HTTPS (secure cookies, HSTS) and real client IPs (per-client login rate limits).
 ENV NODE_ENV=production \
     PORT=3000 \
     APP_DATA_PATH=/data \
-    LIBRARY_BROWSE_ROOT=/data/books
+    LIBRARY_BROWSE_ROOT=/data/books \
+    TRUST_PROXY=loopback,linklocal,uniquelocal,100.64.0.0/10
 
 EXPOSE 3000
 
